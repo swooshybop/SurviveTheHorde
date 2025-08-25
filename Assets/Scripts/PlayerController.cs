@@ -19,11 +19,21 @@ public class PlayerController : MonoBehaviour
     public GameObject attachPrefab;
     public GameObject gameOverPanel;
 
+    [SerializeField] private Animator animator;
+    [SerializeField] private Rigidbody rb;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        if (!animator)
+        {
+            animator = GetComponentInChildren<Animator>();
+        }
+        if (!rb)
+        {
+            rb = GetComponent<Rigidbody>();
+        }
     }
 
     // Update is called once per frame
@@ -35,6 +45,8 @@ public class PlayerController : MonoBehaviour
         {
             Instantiate(attachPrefab, transform.position, attachPrefab.transform.rotation);
         }
+
+        
     }
 
     private void youDied()
@@ -42,6 +54,8 @@ public class PlayerController : MonoBehaviour
         if (isAlive == false)
         {
             Debug.Log("-_- You Died :(");
+            animator.SetInteger("DeathType_int", 2);
+            animator.SetBool("Death_b", true);
 
             if (gameOverPanel != null)
             {
@@ -61,8 +75,16 @@ public class PlayerController : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
 
-        transform.Translate(Vector3.right * speed * horizontalInput * Time.deltaTime);
-        transform.Translate(Vector3.forward * speed * verticalInput * Time.deltaTime);
+        //transform.Translate(Vector3.right * speed * horizontalInput * Time.deltaTime);
+        //transform.Translate(Vector3.forward * speed * verticalInput * Time.deltaTime);
+
+        Vector3 moveLocal = new Vector3(horizontalInput, 0f, verticalInput);   // local XZ
+        transform.Translate(moveLocal.normalized * speed * Time.deltaTime, Space.Self);
+
+        // animate
+        float planarSpeed = moveLocal.magnitude * speed;             
+                                                                      
+        animator.SetFloat("Speed_f", planarSpeed, 0.1f, Time.deltaTime);
     }
 
     private void OnTriggerEnter(Collider other)
