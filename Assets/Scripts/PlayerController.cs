@@ -63,6 +63,11 @@ public class PlayerController : MonoBehaviour
                 speed = 0;
                 isAlive = false;
                 youDied();
+
+                if (GameManager.Instance)
+                {
+                    GameManager.Instance.GameOver();
+                }
             }
             //Destroy(transform.GetChild(childToDestry).gameObject);
 
@@ -70,6 +75,11 @@ public class PlayerController : MonoBehaviour
         else if (other.CompareTag("Gem"))
         {
             Destroy(other.gameObject);
+
+            if (GameManager.Instance)
+            {
+                GameManager.Instance.AddScore(5);
+            }
 
         }
     }

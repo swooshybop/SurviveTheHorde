@@ -14,7 +14,7 @@ public class Menu : MonoBehaviour
     public static Menu Instance;
 
     public TMP_InputField playerName;
-    public Text highScoreText;
+    public TMP_Text highScoreText;
 
     public string nameEntered = "Player";
 

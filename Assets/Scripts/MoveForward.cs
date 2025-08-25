@@ -29,6 +29,11 @@ public class MoveForward : MonoBehaviour
         {
             Destroy(other.gameObject);
             Destroy(gameObject);
+
+            if (GameManager.Instance)
+            {
+                GameManager.Instance.AddScore(10);
+            }
         }
     }
 }
