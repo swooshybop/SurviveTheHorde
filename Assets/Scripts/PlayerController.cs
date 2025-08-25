@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -16,7 +17,8 @@ public class PlayerController : MonoBehaviour
     public bool isAlive = true;
 
     public GameObject attachPrefab;
-    
+    public GameObject gameOverPanel;
+
 
     // Start is called before the first frame update
     void Start()
@@ -40,7 +42,18 @@ public class PlayerController : MonoBehaviour
         if (isAlive == false)
         {
             Debug.Log("-_- You Died :(");
+
+            if (gameOverPanel != null)
+            {
+                gameOverPanel.SetActive(true);
+            }
+
         }
+    }
+
+    public void ReturnToMenu()
+    {
+        SceneManager.LoadScene(0);
     }
 
     void MovePlayer()
@@ -58,6 +71,12 @@ public class PlayerController : MonoBehaviour
         {
             Destroy(other.gameObject);
             hitCount++;
+
+            if (GameManager.Instance)
+            {
+                GameManager.Instance.LoseLife();
+            }
+
             if (hitCount == timesHit)
             {
                 speed = 0;

@@ -8,12 +8,16 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    public TMP_Text scoreText;      // "Score : 0"
-    public TMP_Text bestText;       // "Best : Name : Score"
+    public TMP_Text scoreText;      
+    public TMP_Text bestText;
+    public TMP_Text livesText;
 
     private int score;
     private int bestScore;
     private string bestName;
+
+    private int maxLives = 3;
+    private int currentLives = 3;
 
     void Awake()
     {
@@ -33,8 +37,21 @@ public class GameManager : MonoBehaviour
         bestName = PlayerPrefs.GetString("HighScoreName", "None");
         if (bestText) bestText.text = $"Best : {bestName} : {bestScore}";
         if (scoreText) scoreText.text = $"Score : {score}";
+        if (livesText) livesText.text = $"Lives : {currentLives}";
     }
 
+    public void InitLives(int lives)
+    {
+        maxLives = Mathf.Max(1, lives);
+        currentLives = maxLives;
+        if (livesText) livesText.text = $"Lives : {currentLives}";
+    }
+
+    public void LoseLife()
+    {
+        currentLives = Mathf.Max(0, currentLives - 1);
+        if (livesText) livesText.text = $"Lives : {currentLives}";
+    }
     public void AddScore(int points)
     {
         score += points;
